@@ -66,6 +66,8 @@ async function saveUsdRate() {
 
       await connection.release();
       usdRateFetched = true; // Mark USD rate fetching as completed
+      console.log('USD rate saved successfully. Exiting server...');
+      process.exit(0); // Exit the process after successful save
     }
   } catch (error) {
     console.error(error);
