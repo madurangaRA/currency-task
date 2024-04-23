@@ -4,20 +4,19 @@ const axios = require('axios');
 
 const app = express();
 
-// Flag to track if USD rate has been fetched for this server instance
 let usdRateFetched = false;
 
-// Replace with your actual MySQL connection details
+// Replace with your actual MySQL connection details to run on local
 const pool = mysql.createPool({
-    host: 'mysql-910d8c3f-ba85-4197-803c-871a29817e06-student3405976834-ch.h.aivencloud.com',
-    user: 'avnadmin',
-    password: 'AVNS_R6Pnmzl4MT4lgq38FT2',
-    database: 'defaultdb',
-    port: 12845,
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.HOST,
+    port: process.env.PORT,
 });
 
-// Replace with your API Layer API key
-const apiKey = 'PNS511uFVe2eEmhC0dM6Y6uziGxRzrWI';
+// Replace with your API Layer API key to run on local
+const apiKey = process.env.API_KEY;
 
 // Function to save USD rate (can be called directly or within app.listen())
 async function saveUsdRate() {
@@ -29,8 +28,7 @@ async function saveUsdRate() {
       // Connect to MySQL database
       const connection = await pool.getConnection();
 
-      // **Check if table exists (optional, can be removed if table creation is ensured)**
-      const [rows] = await connection.execute('SHOW TABLES LIKE \'currency\''); // Use single quotes for table name
+      const [rows] = await connection.execute('SHOW TABLES LIKE \'currency\''); 
 
       if (rows.length === 0) {
         // Create table if it doesn't exist
@@ -74,7 +72,6 @@ async function saveUsdRate() {
   }
 }
 
-// Call the saveUsdRate function immediately after server starts (within app.listen() or directly)
 app.listen(3000, async () => {
   console.log('Server listening on port 3000');
   await saveUsdRate(); // Call saveUsdRate to fetch and save USD rate on startup
